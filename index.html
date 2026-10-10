@@ -443,6 +443,62 @@
     </button>
   </section>
 
+  <!-- ========== 7. HÄNDLER (direkt unter dem Hero platziert) ========== -->
+  <section class="section section--white" id="haendler" aria-labelledby="dealers-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="dealers-title">Dein SunMini. Dein Händler.</h2>
+        <p>Wähle, wo du deinen SunMini kaufen möchtest. Den Kauf schließt du direkt im Shop des jeweiligen Händlers ab.</p>
+      </div>
+
+      <div class="dealer-price">
+        <div class="price-tag price-tag--flat price-tag--center js-price" role="group" aria-label="Preis">
+          <div class="price-tag__row">
+            <span class="price-tag__old js-orig-price"><span class="visually-hidden">Statt </span>1.199 €</span>
+            <span class="chip js-discount-chip">-17%</span>
+          </div>
+          <span class="price-tag__new js-sale-price">999 €</span>
+          <span class="price-tag__note">inkl. MwSt., zzgl. Versand · Preis kann je nach Händler variieren</span>
+        </div>
+      </div>
+
+      <!--
+        TODO Go-Live – Händler:
+        - href: auf die konkreten SunMini-Produktseiten der Händler ändern (aktuell nur Startseiten)
+        - Logos: Platzhalter-Wortmarken durch offizielle Händler-Logos ersetzen (<img src="assets/logo-…svg" alt="…">)
+        - data-dealer wird beim Klick an window.dataLayer übergeben (falls Tag Manager eingebunden)
+      -->
+      <ul class="dealers">
+        <li class="dealer">
+          <div class="dealer__logo" aria-hidden="true">
+            <svg viewBox="0 0 180 40"><circle cx="18" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="18" cy="20" r="4" fill="currentColor"/><text x="38" y="27" font-family="Inter, sans-serif" font-size="19" font-weight="700" fill="currentColor">Solarfantasie</text></svg>
+          </div>
+          <h3>Solarfantasie</h3>
+          <p>SunMini-Angebot beim Händler</p>
+          <a class="btn btn--block" href="https://www.solarfantasie.de/" target="_blank" rel="noopener" data-dealer="solarfantasie">Jetzt kaufen<span class="visually-hidden"> bei Solarfantasie (öffnet neuen Tab)</span></a>
+        </li>
+        <li class="dealer">
+          <div class="dealer__logo" aria-hidden="true">
+            <svg viewBox="0 0 140 40"><text x="70" y="28" text-anchor="middle" font-family="Inter, sans-serif" font-size="24" font-weight="800" letter-spacing="1" fill="currentColor">WEECOO</text></svg>
+          </div>
+          <h3>Weecoo</h3>
+          <p>SunMini-Angebot beim Händler</p>
+          <a class="btn btn--block" href="https://www.weecoo.de/" target="_blank" rel="noopener" data-dealer="weecoo">Jetzt kaufen<span class="visually-hidden"> bei Weecoo (öffnet neuen Tab)</span></a>
+        </li>
+        <li class="dealer">
+          <div class="dealer__logo" aria-hidden="true">
+            <svg viewBox="0 0 160 40"><rect x="2" y="8" width="24" height="24" rx="6" fill="currentColor"/><text x="14" y="26" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="800" fill="#F2F2F2">w</text><text x="34" y="27" font-family="Inter, sans-serif" font-size="20" font-weight="600" fill="currentColor">wolqe hub</text></svg>
+          </div>
+          <h3>wolqe hub</h3>
+          <p>SunMini-Angebot beim Händler</p>
+          <a class="btn btn--block" href="https://www.wolqe-hub.de/" target="_blank" rel="noopener" data-dealer="wolqe-hub">Jetzt kaufen<span class="visually-hidden"> bei wolqe hub (öffnet neuen Tab)</span></a>
+        </li>
+      </ul>
+
+      <p class="dealers-note">Vergleiche vor dem Kauf Produktvariante, Lieferumfang und Lieferzeit. Preise, Versand und Zahlungsbedingungen findest du beim jeweiligen Händler.</p>
+    </div>
+  </section>
+
   <!-- ========== 4. URGENCY-LEISTE ========== -->
   <aside class="urgency on-dark" aria-label="Aktionsangebot">
     <div class="wrap">
@@ -510,62 +566,6 @@
         </div>
         <figcaption class="daynight__note" id="daynight-caption">Vereinfachte Darstellung. Die verfügbare Energiemenge hängt von Solarertrag, Speicherstand und Verbrauch ab.</figcaption>
       </figure>
-    </div>
-  </section>
-
-  <!-- ========== 7. HÄNDLER ========== -->
-  <section class="section section--white" id="haendler" aria-labelledby="dealers-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="dealers-title">Dein SunMini. Dein Händler.</h2>
-        <p>Wähle, wo du deinen SunMini kaufen möchtest. Den Kauf schließt du direkt im Shop des jeweiligen Händlers ab.</p>
-      </div>
-
-      <div class="dealer-price">
-        <div class="price-tag price-tag--flat price-tag--center js-price" role="group" aria-label="Preis">
-          <div class="price-tag__row">
-            <span class="price-tag__old js-orig-price"><span class="visually-hidden">Statt </span>1.199 €</span>
-            <span class="chip js-discount-chip">-17%</span>
-          </div>
-          <span class="price-tag__new js-sale-price">999 €</span>
-          <span class="price-tag__note">inkl. MwSt., zzgl. Versand · Preis kann je nach Händler variieren</span>
-        </div>
-      </div>
-
-      <!--
-        TODO Go-Live – Händler:
-        - href: auf die konkreten SunMini-Produktseiten der Händler ändern (aktuell nur Startseiten)
-        - Logos: Platzhalter-Wortmarken durch offizielle Händler-Logos ersetzen (<img src="assets/logo-…svg" alt="…">)
-        - data-dealer wird beim Klick an window.dataLayer übergeben (falls Tag Manager eingebunden)
-      -->
-      <ul class="dealers">
-        <li class="dealer">
-          <div class="dealer__logo" aria-hidden="true">
-            <svg viewBox="0 0 180 40"><circle cx="18" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="18" cy="20" r="4" fill="currentColor"/><text x="38" y="27" font-family="Inter, sans-serif" font-size="19" font-weight="700" fill="currentColor">Solarfantasie</text></svg>
-          </div>
-          <h3>Solarfantasie</h3>
-          <p>SunMini-Angebot beim Händler</p>
-          <a class="btn btn--block" href="https://www.solarfantasie.de/" target="_blank" rel="noopener" data-dealer="solarfantasie">Jetzt kaufen<span class="visually-hidden"> bei Solarfantasie (öffnet neuen Tab)</span></a>
-        </li>
-        <li class="dealer">
-          <div class="dealer__logo" aria-hidden="true">
-            <svg viewBox="0 0 140 40"><text x="70" y="28" text-anchor="middle" font-family="Inter, sans-serif" font-size="24" font-weight="800" letter-spacing="1" fill="currentColor">WEECOO</text></svg>
-          </div>
-          <h3>Weecoo</h3>
-          <p>SunMini-Angebot beim Händler</p>
-          <a class="btn btn--block" href="https://www.weecoo.de/" target="_blank" rel="noopener" data-dealer="weecoo">Jetzt kaufen<span class="visually-hidden"> bei Weecoo (öffnet neuen Tab)</span></a>
-        </li>
-        <li class="dealer">
-          <div class="dealer__logo" aria-hidden="true">
-            <svg viewBox="0 0 160 40"><rect x="2" y="8" width="24" height="24" rx="6" fill="currentColor"/><text x="14" y="26" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="800" fill="#F2F2F2">w</text><text x="34" y="27" font-family="Inter, sans-serif" font-size="20" font-weight="600" fill="currentColor">wolqe hub</text></svg>
-          </div>
-          <h3>wolqe hub</h3>
-          <p>SunMini-Angebot beim Händler</p>
-          <a class="btn btn--block" href="https://www.wolqe-hub.de/" target="_blank" rel="noopener" data-dealer="wolqe-hub">Jetzt kaufen<span class="visually-hidden"> bei wolqe hub (öffnet neuen Tab)</span></a>
-        </li>
-      </ul>
-
-      <p class="dealers-note">Vergleiche vor dem Kauf Produktvariante, Lieferumfang und Lieferzeit. Preise, Versand und Zahlungsbedingungen findest du beim jeweiligen Händler.</p>
     </div>
   </section>
 
