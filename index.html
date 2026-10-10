@@ -137,6 +137,8 @@
   .price-tag--center .price-tag__row { justify-content: center; }
   /* Kein Rabatt (SALE_PRICE >= Originalpreis): Streichpreis + Badge ausblenden */
   .no-discount .price-tag__old, .no-discount .js-discount-chip { display: none; }
+  /* Preis noch geheim (SALE_PRICE = null): "??? €" mit Streichpreis, aber ohne Badge */
+  .price-hidden .js-discount-chip { display: none; }
 
   /* ---------- 2. Hero ---------- */
   .hero {
@@ -361,7 +363,7 @@
       <div class="header-price js-price" aria-label="Aktionspreis">
         <span class="chip js-discount-chip">-17%</span>
         <span class="header-price__old js-orig-price">1.199 €</span>
-        <span class="header-price__new js-sale-price">999 €</span>
+        <span class="header-price__new js-sale-price">??? €</span>
       </div>
       <a class="btn btn--sm" href="#haendler">Jetzt kaufen</a>
     </div>
@@ -425,7 +427,7 @@
               <span class="price-tag__old js-orig-price"><span class="visually-hidden">Statt </span>1.199 €</span>
               <span class="chip js-discount-chip">-17%</span>
             </div>
-            <span class="price-tag__new js-sale-price">999 €</span>
+            <span class="price-tag__new js-sale-price">??? €</span>
             <span class="price-tag__note">inkl. MwSt., zzgl. Versand · Preis kann je nach Händler variieren</span>
           </div>
 
@@ -457,7 +459,7 @@
             <span class="price-tag__old js-orig-price"><span class="visually-hidden">Statt </span>1.199 €</span>
             <span class="chip js-discount-chip">-17%</span>
           </div>
-          <span class="price-tag__new js-sale-price">999 €</span>
+          <span class="price-tag__new js-sale-price">??? €</span>
           <span class="price-tag__note">inkl. MwSt., zzgl. Versand · Preis kann je nach Händler variieren</span>
         </div>
       </div>
@@ -637,7 +639,7 @@
             <span class="price-tag__old js-orig-price"><span class="visually-hidden">Statt </span>1.199 €</span>
             <span class="chip js-discount-chip">-17%</span>
           </div>
-          <span class="price-tag__new js-sale-price">999 €</span>
+          <span class="price-tag__new js-sale-price">??? €</span>
           <span class="price-tag__note">inkl. MwSt., zzgl. Versand · Preis kann je nach Händler variieren</span>
         </div>
         <div class="final__urgency">
@@ -687,7 +689,7 @@
    KONFIGURATION – vor Go-Live prüfen/ersetzen
    ===================================================================== */
 const ORIGINAL_PRICE = 1199;                               // UVP in €
-const SALE_PRICE = 999;                                    // TODO: finalen Aktionspreis eintragen
+const SALE_PRICE = null;                                   // TODO: finalen Aktionspreis eintragen (z. B. 999). null = Teaser "??? €", Rabatt-Badge ausgeblendet
 const OFFER_END_DATE = new Date('2026-10-17T23:59:59');    // TODO: Aktionsende (lokale Zeit des Besuchers; für feste MEZ/MESZ z. B. '2026-10-17T23:59:59+02:00')
 const UNITS_LEFT = 23;                                     // TODO: Restbestand – muss manuell oder per Backend aktuell gehalten werden (0 = Hinweis ausblenden)
 
@@ -708,8 +710,12 @@ function formatEuro(value) {
   }).format(value);
 }
 (function renderPrices() {
-  const discountPercent = calcDiscountPercent(ORIGINAL_PRICE, SALE_PRICE);
-  document.querySelectorAll('.js-sale-price').forEach(el => { el.textContent = formatEuro(SALE_PRICE); });
+  const priceHidden = SALE_PRICE === null;
+  const discountPercent = priceHidden ? 0 : calcDiscountPercent(ORIGINAL_PRICE, SALE_PRICE);
+  document.querySelectorAll('.js-sale-price').forEach(el => {
+    el.textContent = priceHidden ? '??? €' : formatEuro(SALE_PRICE);
+    if (priceHidden) el.setAttribute('aria-label', 'Aktionspreis wird bald bekanntgegeben');
+  });
   document.querySelectorAll('.js-orig-price').forEach(el => {
     el.innerHTML = '<span class="visually-hidden">Statt </span>' + formatEuro(ORIGINAL_PRICE);
   });
@@ -717,7 +723,10 @@ function formatEuro(value) {
     el.textContent = '-' + discountPercent + '%';
     el.setAttribute('aria-label', discountPercent + ' Prozent Rabatt');
   });
-  document.querySelectorAll('.js-price').forEach(el => el.classList.toggle('no-discount', discountPercent === 0));
+  document.querySelectorAll('.js-price').forEach(el => {
+    el.classList.toggle('price-hidden', priceHidden);
+    el.classList.toggle('no-discount', !priceHidden && discountPercent === 0);
+  });
 })();
 
 // ---------- Countdown ----------
