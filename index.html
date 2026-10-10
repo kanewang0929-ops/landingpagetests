@@ -385,6 +385,8 @@
           ffmpeg -i sunmini-video.mp4 -vf scale=1920:1080 -c:v libx264 -crf 23 -preset slow -maxrate 6M -bufsize 12M -an -movflags +faststart sunmini-video-1080p.mp4
           ffmpeg -i sunmini-video.mp4 -vf scale=960:540  -c:v libx264 -crf 23 -preset slow -maxrate 2M -bufsize 4M  -an -movflags +faststart sunmini-video-540p.mp4
           (Loop: zusätzlich -ss 33 -t 14 vor -i)
+          WebM-Fallback (nur Loop): ffmpeg -ss 33 -t 14 -i sunmini-video.mp4 -vf scale=1920:1080 -c:v libvpx-vp9 -crf 34 -b:v 0 -row-mt 1 -an sunmini-loop-1080p.webm
+                                    (Mobile: scale=960:540, -crf 36)
 
         Autoplay steuert das Script am Seitenende (Mobile-Quelle/preload, prefers-reduced-motion,
         blockiertes Autoplay). Ohne autoplay-Attribut bleibt bei JS-Ausfall/Blockade das Poster stehen –
@@ -397,8 +399,13 @@
              preload="metadata"
              poster="assets/sunmini-poster.jpg"
              aria-hidden="true" tabindex="-1">
-        <source src="assets/sunmini-loop-540p.mp4" type="video/mp4" media="(max-width: 640px)">
-        <source src="assets/sunmini-loop-1080p.mp4" type="video/mp4">
+        <!-- H.264 (MP4) zuerst, VP9 (WebM) als Fallback für Browser ohne H.264 (z. B. manche Chromium-/Linux-Builds).
+             Die codecs-Angabe ist nötig, damit canPlayType() zuverlässig entscheiden kann.
+             Beim Umschalten auf das volle Video: High-Profile-Codes bleiben gleich (1080p = avc1.640032, 540p = avc1.64001F). -->
+        <source src="assets/sunmini-loop-540p.mp4" type='video/mp4; codecs="avc1.64001F"' media="(max-width: 640px)">
+        <source src="assets/sunmini-loop-540p.webm" type='video/webm; codecs="vp9"' media="(max-width: 640px)">
+        <source src="assets/sunmini-loop-1080p.mp4" type='video/mp4; codecs="avc1.640032"'>
+        <source src="assets/sunmini-loop-1080p.webm" type='video/webm; codecs="vp9"'>
       </video>
     </div>
 
@@ -755,9 +762,11 @@ function formatCountdown(p) {
   const toggle = document.getElementById('video-toggle');
   if (!video) return;
   const isMobile = window.matchMedia('(max-width: 640px)').matches;
-  // JS-Weiche: nicht alle Browser werten <source media> aus – Mobile-Datei daher explizit setzen
-  const mobileSource = video.querySelector('source[media]');
-  if (isMobile && mobileSource) video.src = mobileSource.getAttribute('src');
+  // JS-Weiche: nicht alle Browser werten <source media> aus – passende Größe und Format daher explizit wählen
+  const sources = Array.from(video.querySelectorAll('source'))
+    .filter(el => el.hasAttribute('media') === isMobile)
+    .filter(el => video.canPlayType(el.type) !== '');
+  if (sources.length) video.src = sources[0].getAttribute('src');
   // Desktop: vollständig vorladen; Mobile: nur Metadaten (Datenvolumen); reduzierte Bewegung: gar nicht
   video.preload = reduceMotion.matches ? 'none' : (isMobile ? 'metadata' : 'auto');
 
@@ -772,7 +781,12 @@ function formatCountdown(p) {
     const p = video.play();
     if (p && typeof p.then === 'function') {
       p.then(() => { toggle.hidden = false; setToggleState(true); })
-       .catch(() => { /* Autoplay blockiert (z. B. iOS-Stromsparmodus): Poster bleibt sichtbar */ toggle.hidden = true; });
+       .catch(err => {
+         // Autoplay blockiert (z. B. iOS-Stromsparmodus, Browser-Einstellung): Poster bleibt sichtbar,
+         // Play-Button anbieten. Bei nicht abspielbarer Datei Button ausblenden.
+         if (err && err.name === 'NotAllowedError') { toggle.hidden = false; setToggleState(false); }
+         else toggle.hidden = true;
+       });
     }
   }
   function stop() { video.pause(); setToggleState(false); }
